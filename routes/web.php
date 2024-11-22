@@ -1,8 +1,18 @@
 <?php
 
-use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\PasswordConfirmationController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'Home')->name('home');
+Route::middleware('auth')->group(function () {
 
-Route::get('/register', [RegisterController::class, 'create'])->name('register');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('verified')->name('dashboard');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'updateInfo'])->name('profile.edit');
+});
+
+Route::inertia('/', 'Home')->middleware('verified')->name('home');
+
+require __DIR__ . '/auth.php';
