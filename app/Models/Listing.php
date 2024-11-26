@@ -11,7 +11,7 @@ class Listing extends Model
 
     protected $fillable = [
         'title',
-        'decs',
+        'desc',
         'tags',
         'email',
         'link',
@@ -35,6 +35,10 @@ class Listing extends Model
 
         if ($filter['user_id'] ?? false) {
             $query->where('user_id', $filter['user_id']);
+        }
+
+        if ($filter['tag'] ?? false) {
+            $query->where('tags', 'like', '%' . $filter['tag'] . '%');
         }
     }
 }

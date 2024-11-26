@@ -7,7 +7,11 @@ defineProps({
 });
 
 const searchUser = (id) => {
-    router.get(route('home', { search: params.search, user_id: id }, { preserveScroll: true }));
+    router.get(route('home', { search: params.search, user_id: id, tag: params.tag }, { preserveScroll: true }));
+}
+
+const searchTag = (tag) => {
+    router.get(route('home', { search: params.search, user_id: params.user_id, tag: tag }, { preserveScroll: true }));
 }
 </script>
 
@@ -16,7 +20,7 @@ const searchUser = (id) => {
     dark:bg-slate-800 h-full flex flex-col justify-between">
         <div>
             <!-- Image -->
-            <Link href="">
+            <Link :href="route('listings.show', listing.id)">
             <img :src="listing.image
                 ? `storage/${listing.image}`
                 : `storage/images/listing/default.jpg`" class="w-full h-full object-cover object-center bg-slate-300">
@@ -37,7 +41,7 @@ const searchUser = (id) => {
         <!-- Tags -->
         <div v-if="listing.tags" class="flex items-center gap-3 px-4 pb-4">
             <div v-for="tag in listing.tags.split(',')" :key="tag">
-                <button
+                <button @click="searchTag(tag)"
                     class="text-white bg-slate-500 rounded-full px-2 px-py hover:bg-slate-700 dark:hover:bg-slate-900">
                     {{ tag }}
                 </button>
