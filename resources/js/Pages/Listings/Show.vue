@@ -5,9 +5,12 @@ import Title from '../../Components/Title.vue'
 const props = defineProps({
     listing: Object,
     user: Object,
+    canModify: Boolean
 })
-{
-    console.log(props.listing.image)
+const deleteListing = () => {
+    if (confirm('Are you sure you want to delete this listing?')) {
+        router.delete(route('listings.destroy', listing.id))
+    }
 }
 </script>
 
@@ -17,7 +20,7 @@ const props = defineProps({
 
     <Container class="flex gap-4">
         <div class="w-1/4 rounded-md overflow-hidden">
-            <img :src="props.listing.image ? `/storage/${listing.image}` : `/storage/listing/default.jpg`"
+            <img :src="props.listing.image ? `/storage/${listing.image}` : `/storage/images/listing/default.jpg`"
                 class="w-full h-full object-cover object-center">
         </div>
 
@@ -26,7 +29,14 @@ const props = defineProps({
             <div class="mb-6">
                 <div class="flex items-end justify-between mb-2">
                     <p class="w-full text-slate-400 border-b">Listing Details</p>
-                    <button>Edit and Delete</button>
+                    <div v-if="canModify" class="pl-4 flex gap-2">
+                        <Link :href="route('listings.edit', { listing })"
+                            class="rounded-md bg-green-500 px-4 py-2 border text-white hover:outline outline-green-500 outline-offset-2">
+                        Edit</Link>
+                        <button @click="deleteListing"
+                            class="rounded-md bg-red-500 px-4 py-2 border text-white hover:outline outline-red-500 outline-offset-2">
+                            Delete</button>
+                    </div>
                 </div>
 
                 <p class="text-2xl font-bold mb-4">{{ listing.title }}</p>

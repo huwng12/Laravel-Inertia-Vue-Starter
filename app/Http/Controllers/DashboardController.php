@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Listing;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return inertia('Dashboard');
+        $listings = $request->user()->role !== 'suspended' ? $request->user()->listings()->latest()->paginate(1) : null;
+        return inertia('Dashboard', [
+            'listings' => $listings,
+            'status' => session('status'),
+        ]);
     }
 }
