@@ -40,5 +40,29 @@ class Listing extends Model
         if ($filter['tag'] ?? false) {
             $query->where('tags', 'like', '%' . $filter['tag'] . '%');
         }
+
+        if ($filter['disapproved'] ?? false) {
+            $query->where('approved', 0);
+        }
+    }
+
+    //Filter not have dsc for admin filter only title
+    public function scopeUserListingForAdminFilter($query, array $filter)
+    {
+        if ($filter['search'] ?? false) {
+            $query->where('title', 'like', '%' . request('search') . '%');
+        }
+
+        if ($filter['user_id'] ?? false) {
+            $query->where('user_id', $filter['user_id']);
+        }
+
+        if ($filter['tag'] ?? false) {
+            $query->where('tags', 'like', '%' . $filter['tag'] . '%');
+        }
+
+        if ($filter['disapproved'] ?? false) {
+            $query->where('approved', 0);
+        }
     }
 }

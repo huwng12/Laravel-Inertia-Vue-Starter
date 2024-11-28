@@ -8,6 +8,13 @@ use Illuminate\Auth\Access\Response;
 
 class ListingPolicy
 {
+    public function before(User $user)
+    {
+        if ($user->role === 'admin') {
+            return true;
+        }
+        return false;
+    }
 
     public function view(?User $user, Listing $listing): bool
     {
@@ -24,5 +31,10 @@ class ListingPolicy
     public function modify(User $user, Listing $listing): bool
     {
         return $user->role !== 'suspended' && $user->id === $listing->user_id;
+    }
+
+    public function approve(User $user, Listing $listing)
+    {
+        return $user->role === 'admin';
     }
 }

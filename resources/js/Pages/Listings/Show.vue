@@ -1,6 +1,7 @@
 <script setup>
 import Container from '../../Components/Container.vue'
 import Title from '../../Components/Title.vue'
+import { useForm, router } from "@inertiajs/vue3";
 
 const props = defineProps({
     listing: Object,
@@ -12,11 +13,28 @@ const deleteListing = () => {
         router.delete(route('listings.destroy', listing.id))
     }
 }
+
+const approved = (listing) => {
+    let msg = listing.approved ? 'Do you want to DISAPPROVE this listing?' : 'Do you want to APPROVE this listing?';
+    if (confirm(msg)) {
+        router.put(route('admin.approve', listing.id))
+    }
+}
 </script>
 
 <template>
 
     <Head title="- Listing Details" />
+
+    <!-- Admin -->
+    <div v-if="$page.props.auth.user && $page.props.auth.user.role === 'admin'"
+        class="flex items-center justify-between mb-6 p-6 bg-slate-800 text-white rounded-md font-medium">
+        <p>This listing is {{ listing.approved ? "Approved" : "Disapproved" }}</p>
+        <button @click.prevent="approved(listing)" class="px-3 py-1 rounded-md text-white"
+            :class="listing.approved ? 'bg-red-500' : 'bg-green-500'">{{
+                listing.approved ? 'Disapproved it' : 'Approved it'
+            }}</button>
+    </div>
 
     <Container class="flex gap-4">
         <div class="w-1/4 rounded-md overflow-hidden">
