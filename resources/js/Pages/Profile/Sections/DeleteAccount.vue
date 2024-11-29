@@ -25,8 +25,13 @@ const deleteAccount = () => {
 <template>
     <Container class="mb-6">
         <div class="mb-6">
-            <Title>Update Password</Title>
-            <p>Ensure your are using a long, random password to stay secure</p>
+            <Title>Delete Account</Title>
+            <ul>
+                <li>Erase all your data permanently.</li>
+                <li>This action cannot be undone.</li>
+            </ul>
+
+
         </div>
         <div v-if="showConfirmPassword">
             <ErrorMessages :errors="form.errors" />

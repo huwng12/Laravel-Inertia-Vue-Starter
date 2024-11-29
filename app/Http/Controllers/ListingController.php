@@ -90,6 +90,8 @@ class ListingController extends Controller implements HasMiddleware
             'listing' => $listing,
             'user' => $listing->user->only('name', 'id'),
             'canModify' => Auth::user() ? Auth::user()->can('modify', $listing) : null,
+            'comments' => $listing->comments()->where('status', '1')->latest()->get(),
+            'status' => session('status'),
         ]);
     }
 

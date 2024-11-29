@@ -12,7 +12,7 @@ class AdminController extends Controller
     {
         $users = User::with('listings')
             ->filter(request(['search', 'role']))
-            ->paginate(3)
+            ->paginate(5)
             ->withQueryString();
         return inertia('Admin/AdminDashboard', [
             'users' => $users,
@@ -25,7 +25,7 @@ class AdminController extends Controller
         $user_listings = $user->listings()
             ->userListingForAdminFilter(request(['search', 'disapproved']))
             ->latest()
-            ->paginate(3)
+            ->paginate(5)
             ->withQueryString();
         // dd($user_listings);
         return inertia('Admin/UserPage', [

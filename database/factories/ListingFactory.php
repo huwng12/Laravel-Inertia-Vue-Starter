@@ -18,6 +18,7 @@ class ListingFactory extends Factory
     {
         return [
             'user_id' => fake()->randomElement([1, 2, 3, 4, 5, 6, 7]),
+            'category_id' => fake()->randomElement([1, 2, 3, 4, 5]),
             'title' => fake()->sentence(10),
             'desc' => fake()->sentence(20),
             'email' => fake()->email,

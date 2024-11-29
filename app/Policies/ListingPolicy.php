@@ -13,7 +13,7 @@ class ListingPolicy
         if ($user->role === 'admin') {
             return true;
         }
-        return false;
+        // return false;
     }
 
     public function view(?User $user, Listing $listing): bool
