@@ -7,9 +7,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use App\Repositories\Profile\ProfileRepositoryInterface;
 
 class ProfileController extends Controller
 {
+    private $profileRepository;
+
+    public function __construct(ProfileRepositoryInterface $profileRepository)
+    {
+        $this->profileRepository = $profileRepository;
+    }
+
     public function edit(Request $request)
     {
         return inertia('Profile/Edit', [
@@ -31,13 +39,7 @@ class ProfileController extends Controller
             ],
         ]);
 
-        $request->user()->fill($fields);
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
+        $this->profileRepository->updateInfo($fields, $request->user());
 
         return redirect()->route('profile.edit');
     }
@@ -49,10 +51,7 @@ class ProfileController extends Controller
             'password' => ['required', 'confirmed', 'min:3'],
         ]);
 
-        $request->user()->update([
-            'password' => Hash::make($fields['password']),
-        ]);
-
+        $this->profileRepository->updatePassword($fields, $request->user());
         return redirect()->route('profile.edit');
     }
 
@@ -62,9 +61,7 @@ class ProfileController extends Controller
             'password' => ['required', 'current_password'],
         ]);
 
-        $request->user()->delete();
-
-        Auth::logout();
+        $this->profileRepository->destroyAccount($request->user());
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

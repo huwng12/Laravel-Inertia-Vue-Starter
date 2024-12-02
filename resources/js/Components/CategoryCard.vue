@@ -2,20 +2,21 @@
 import { router } from '@inertiajs/vue3';
 
 const params = route().params
-defineProps({
+const props = defineProps({
     listing: Object,
 });
 
 const searchUser = (id) => {
-    router.get(route('home', { search: params.search, user_id: id, tag: params.tag }, { preserveScroll: true }));
+    router.get(route('category.index', { categoryId: props.listing.category_id, search: params.search, user_id: id, tag: params.tag }, { preserveScroll: true }));
 }
 
 const searchTag = (tag) => {
-    router.get(route('home', { search: params.search, user_id: params.user_id, tag: tag }, { preserveScroll: true }));
+    router.get(route('category.index', { categoryId: props.listing.category_id, search: params.search, user_id: params.user_id, tag: tag }, { preserveScroll: true }));
 }
 </script>
 
 <template>
+
     <div class="bg-white rounded-lg shadow-lg overflow-hidden 
     dark:bg-slate-800 h-full flex flex-col justify-between">
         <div>

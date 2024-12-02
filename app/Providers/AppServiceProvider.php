@@ -5,15 +5,26 @@ namespace App\Providers;
 use App\Models\Category;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
+use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\User\UserRepository;
+use App\Repositories\Listing\ListingRepositoryInterface;
+use App\Repositories\Listing\ListingRepository;
+use App\Repositories\Profile\ProfileRepositoryInterface;
+use App\Repositories\Profile\ProfileRepository;
+use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\Category\CategoryRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
      */
-    public function register(): void
+    public function register()
     {
-        //
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(ListingRepositoryInterface::class, ListingRepository::class);
+        $this->app->bind(ProfileRepositoryInterface::class, ProfileRepository::class);
+        $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
     }
 
     /**

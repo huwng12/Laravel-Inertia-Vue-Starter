@@ -11,9 +11,17 @@ use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use App\Repositories\Listing\ListingRepositoryInterface;
 
 class ListingController extends Controller implements HasMiddleware
 {
+    private $listingRepository;
+
+    public function __construct(ListingRepositoryInterface $listingRepository)
+    {
+        $this->listingRepository = $listingRepository;
+    }
+
     public static function middleware()
     {
         return [new Middleware(['auth', 'verified', NotSuspended::class], except: ['index', 'show'])];
@@ -23,14 +31,16 @@ class ListingController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        $listings = Listing::whereHas('user', function (Builder $query) {
-            $query->where('role', '!=', 'suspended');
-        })->with('user')
-            ->where('approved', true)
-            ->filter(request(['search', 'user_id', 'tag']))
-            ->latest()
-            ->paginate(6)
-            ->withQueryString();
+        // $listings = Listing::whereHas('user', function (Builder $query) {
+        //     $query->where('role', '!=', 'suspended');
+        // })->with('user')
+        //     ->where('approved', true)
+        //     ->filter(request(['search', 'user_id', 'tag']))
+        //     ->latest()
+        //     ->paginate(6)
+        //     ->withQueryString();
+
+        $listings = $this->listingRepository->getAllListings(request(['search', 'user_id', 'tag']), 6);
 
         return inertia('Home', [
             'listings' => $listings,
@@ -62,19 +72,8 @@ class ListingController extends Controller implements HasMiddleware
             'link' => ['nullable', 'url'],
             'image' => ['nullable', 'file', 'max:3072', 'mimes:jpeg,jpg,png,webp']
         ]);
-        // $fields['tags'] = explode(',', $fields['tags']);
-        // $fields['tags'] = array_map('trim', $fields['tags']);
-        // $fields['tags'] = array_filter($fields['tags']);
-        // $fields['tags'] = array_unique($fields['tags']);
-        // $fields['tags'] = implode(',', $fields['tags']);
-        // dd($fields['tags']);
 
-        if ($request->hasFile('image')) {
-            $fields['image'] = Storage::disk('public')->put('images/listing', $request->image);
-        }
-
-        $fields['tags'] = implode(',', array_unique(array_filter(array_map('trim', explode(',',  $request->tags)))));
-        $request->user()->listings()->create($fields);
+        $this->listingRepository->createListing($fields, $request->file('image'), $fields['tags'], $request->user());
 
         return redirect()->route('dashboard')->with('status', 'Listing created successfully.');
     }
@@ -123,17 +122,7 @@ class ListingController extends Controller implements HasMiddleware
             'image' => ['nullable', 'file', 'max:3072', 'mimes:jpeg,jpg,png,webp']
         ]);
 
-        if ($request->hasFile('image')) {
-            if ($listing->image) {
-                Storage::disk('public')->delete($listing->image);
-            }
-            $fields['image'] = Storage::disk('public')->put('images/listing', $request->image);
-        } else {
-            $fields['image'] = $listing->image;
-        }
-
-        $fields['tags'] = implode(',', array_unique(array_filter(array_map('trim', explode(',',  $request->tags)))));
-        $listing->update([...$fields, 'approved' => false]);
+        $this->listingRepository->updateListing($listing->id, $fields, $request->file('image'), $fields['tags']);
 
         return redirect()->route('dashboard')->with('status', 'Listing updated successfully.');
     }
@@ -145,10 +134,7 @@ class ListingController extends Controller implements HasMiddleware
     {
         Gate::authorize(('modify'), $listing);
 
-        if ($listing->image) {
-            Storage::disk('public')->delete($listing->image);
-        }
-        $listing->delete();
+        $this->listingRepository->deleteListing($listing->id);
         return redirect()->route('dashboard')->with('status', 'Listing deleted successfully.');
     }
 }

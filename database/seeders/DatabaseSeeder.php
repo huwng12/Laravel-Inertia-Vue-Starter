@@ -22,6 +22,16 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Tech', 'status' => 1],
             ['name' => 'Health', 'status' => 1],
             ['name' => 'Sport', 'status' => 1],
+            ['name' => 'Science', 'status' => 1],
+            ['name' => 'Politics', 'status' => 1],
+            ['name' => 'Entertainment', 'status' => 1],
+            ['name' => 'Education', 'status' => 1],
+            ['name' => 'Lifestyles', 'status' => 1],
+            ['name' => 'Travel', 'status' => 1],
+            ['name' => 'Real Property', 'status' => 1],
+            ['name' => 'Podcasts', 'status' => 1],
+            ['name' => 'Food', 'status' => 1],
+            ['name' => 'Relax', 'status' => 1],
         ]);
         Listing::factory(50)->create();
     }

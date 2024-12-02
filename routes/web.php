@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\PasswordConfirmationController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ListingController;
@@ -25,6 +26,9 @@ Route::middleware('auth')->group(function () {
 Route::get('/', [ListingController::class, 'index'])->name('home');
 Route::resource('listings', ListingController::class)->except('index');
 
+//Listing Category
+Route::get('/category/{categoryId}', [CategoryController::class, 'index'])->name('category.index');
+
 //Admin routes
 Route::middleware(['auth', 'verified', Admin::class])
     ->controller(AdminController::class)
@@ -34,6 +38,8 @@ Route::middleware(['auth', 'verified', Admin::class])
         Route::put('/admin/{user}/role', 'role')->name('admin.role');
         Route::put('/listings/{listing}/approve', 'approve')->name('admin.approve');
     });
+
+
 
 //Auth routes
 require __DIR__ . '/auth.php';

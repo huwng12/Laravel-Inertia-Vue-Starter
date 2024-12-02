@@ -39,7 +39,7 @@ const approveListing = (listing) => {
 
     <Head :title="`- ${user.name} Listings`" />
     <div class="mb-6">
-        <Title>{{ user.name }} latest listings</Title>
+        <Title>"{{ user.name }}" latest listings</Title>
         <SessionMessages :status="status" />
 
         <div class="flex items-center justify-between mb-2">
