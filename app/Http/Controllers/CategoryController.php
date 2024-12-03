@@ -25,4 +25,39 @@ class CategoryController extends Controller
             'category_name' => $category_name,
         ]);
     }
+
+    public function list()
+    {
+        $categoryList = $this->categoryRepository->getAllCategories(request(['search', 'user_id', 'tag']), 10);
+        return inertia('Category/List', [
+            'categoryList' => $categoryList,
+            'status' => session('status')
+        ]);
+    }
+
+    public function create()
+    {
+        return inertia('Category/Create');
+    }
+
+    public function active($categoryId)
+    {
+        $this->categoryRepository->activeCategory($categoryId);
+        return redirect()->route('category.list')->with('status', 'Category status updated successfully');
+    }
+
+    public function delete($categoryId)
+    {
+        $this->categoryRepository->deleteCategory($categoryId);
+        return redirect()->route('category.list')->with('status', 'Category deleted successfully');
+    }
+
+    public function store(Request $request)
+    {
+        $fields = $request->validate([
+            'name' => 'required|string|max:255|unique:categories',
+        ]);
+        $this->categoryRepository->createCategory($fields);
+        return redirect()->route('category.list')->with('status', 'Category created successfully');
+    }
 }

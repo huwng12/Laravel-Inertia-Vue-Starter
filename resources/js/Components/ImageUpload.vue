@@ -4,7 +4,8 @@ import { ref } from 'vue';
 const emits = defineEmits(['image']);
 const props = defineProps({
     listingImage: String
-})
+});
+console.log(props.listingImage);
 const currentImage = props.listingImage ? `/storage/${props.listingImage}` : null;
 const isShowReload = ref(false);
 
@@ -22,6 +23,8 @@ const reloadImage = () => {
     preview.value = currentImage;
     oversizedImage.value = false;
     isShowReload.value = false;
+    emits('image', null);
+
 }
 
 </script>

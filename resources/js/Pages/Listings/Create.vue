@@ -7,6 +7,7 @@ import TextArea from '../../Components/TextArea.vue';
 import { useForm } from '@inertiajs/vue3';
 import ImageUpload from '../../Components/ImageUpload.vue';
 import PrimaryBtn from '../../Components/PrimaryBtn.vue';
+import SelectCategory from '../../Components/SelectCategory.vue';
 
 const form = useForm({
     'title': '',
@@ -15,6 +16,10 @@ const form = useForm({
     'email': '',
     'link': '',
     'image': '',
+    'category_id': '',
+})
+const props = defineProps({
+    categories: Object,
 })
 </script>
 
@@ -34,6 +39,9 @@ const form = useForm({
                 <InputField label="Tags" icon="tags" placeholder="My new listing" v-model="form.tags" />
                 <TextArea label="TextArea" icon="newspaper" placeholder="This is my listing description"
                     v-model="form.desc" />
+                <SelectCategory label="Select Category" :categories="props.categories"
+                    @categoryId="e => (form.category_id = e)" />
+
             </div>
 
             <div class="space-y-6">

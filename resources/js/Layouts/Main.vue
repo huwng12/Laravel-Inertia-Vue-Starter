@@ -2,11 +2,10 @@
 import { switchTheme } from "../theme";
 import NavLink from "../Components/NavLink.vue";
 import { computed, ref } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
 import { defineProps } from "vue";
 
 const page = usePage();
-console.log(page.component);  // Use the data returned by usePage
 
 const user = computed(() => page.props.auth.user);
 const show = ref(false);
@@ -19,25 +18,25 @@ const showMore = () => {
 const props = defineProps({
     categories: Object
 });
-
 </script>
 
 <template>
 
     <div v-show="show" @click="show = false" class="fixed inset-0 z-40"></div>
+    <div v-show="showMoreButton" @click="showMoreButton = false" class="fixed inset-0 z-40"></div>
     <header class="bg-slate-800 text-white">
         <nav class="p-6 mx-auto w-full flex items-center justify-between">
             <NavLink routeName="home" componentName="Home">Home</NavLink>
             <!-- Categories -->
             <div class="flex relative items-center text-lg gap-6 ">
                 <div v-for="(category, i) in categories.slice(0, 6)" :key="i" class="font-bold">
-                    <a :href="route('category.index', { categoryId: category.id })"
+                    <Link :href="route('category.index', { categoryId: category.id })"
                         class="hover:bg-slate-700 p-4 rounded-lg cursor-pointer" :class="{
                             'bg-slate-700': $page.url === `/category/${category.id}`,
                             'hover:bg-slate-700': true
                         }">
-                        {{ category.name }}
-                    </a>
+                    {{ category.name }}
+                    </Link>
                 </div>
                 <div v-if="categories.length > 6" class="dropdown m-menu-fw ">
                     <a href="#" @click.prevent="showMore" class="dropdown-toggle font-bold">
@@ -45,7 +44,7 @@ const props = defineProps({
                     </a>
                 </div>
                 <ul v-show="showMoreButton"
-                    class="absolute grid grid-cols-4 w-auto z-40 dropdown-menu bg-slate-800 text-white rounded-lg border-slate-300 border overflow-hidden overflow-y-auto max-h-64">
+                    class="absolute left-0 top-full mt-4 grid grid-cols-4 w-auto z-40 dropdown-menu bg-slate-800 text-white rounded-lg border-slate-300 border overflow-hidden overflow-y-auto max-h-64">
                     <li v-for="(category, index) in categories.slice(6)" :key="category.id">
                         <a :href="route('category.index', { categoryId: category.id })"
                             class="block px-4 py-2 w-full hover:bg-slate-700"
@@ -73,6 +72,9 @@ const props = defineProps({
 
                     <div v-if="show" @click="show = false"
                         class="absolute z-50 top-16 right-0 bg-slate-800 text-white rounded-lg border-slate-300 border overflow-hidden w-40">
+                        <Link v-if="$page.props.auth.user.role === 'admin'" :href="route('category.list')"
+                            class="block w-full px-6 py-3 hover:bg-slate-700 text-lefts">
+                        Category</Link>
                         <Link :href="route('listings.create')"
                             class="block w-full px-6 py-3 hover:bg-slate-700 text-lefts">
                         New Listing</Link>

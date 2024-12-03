@@ -28,6 +28,8 @@ const showDisapprovedListing = (e) => {
 <template>
 
     <Head title="- Dashboard" />
+    <SessionMessages :status="status" />
+
     <div v-if="listings">
         <div v-if="Object.keys(listings.data).length">
             <div class="mb-6">
@@ -40,16 +42,24 @@ const showDisapprovedListing = (e) => {
                     </div>
                 </div>
                 <!-- Show disapproved listings -->
-                <div class="flex items-center gap-1 hover:bg-slate-300 dark:hover:bg-slate-800 rounded-md px-2 py-1">
-                    <input id="showDisapprovedListing" @input="showDisapprovedListing" :checked="params.disapproved"
-                        class="rounded-full border-1 outline-0 text-indigo-500 ring-indigo-500 border-slate-700 cursor-pointer"
-                        type="checkbox"></input>
-                    <label for="showDisapprovedListing"
-                        class="block font-bold text-sm cursor-pointer text-slate-700 dark:text-slate-300">Show
-                        disapproved
-                        listings</label>
+                <div class="flex items-center justify-between mb-4">
+                    <div
+                        class="flex items-center mb-4 gap-1 hover:bg-slate-300 dark:hover:bg-slate-800 rounded-md px-2 py-1">
+                        <input id="showDisapprovedListing" @input="showDisapprovedListing" :checked="params.disapproved"
+                            class="rounded-full border-1 outline-0 text-indigo-500 ring-indigo-500 border-slate-700 cursor-pointer"
+                            type="checkbox"></input>
+                        <label for="showDisapprovedListing"
+                            class="block font-bold text-sm cursor-pointer text-slate-700 dark:text-slate-300">Show
+                            disapproved
+                            listings
+                        </label>
+                    </div>
+                    <Link :href="route('listings.create')"
+                        class="bg-green-500 text-white rounded-lg p-2 hover:outline outline-green-500 outline-offset-2">
+                    Create Listing
+                    </Link>
                 </div>
-                <SessionMessages :status="status" />
+
                 <table
                     class="w-full table-fixed border-collapse overflow-hidden rounded-md text-sm ring-1 ring-slate-300 dark:ring-slate-800 bg-white shadow-lg">
                     <thead class="text-slate-600 dark:text-slate-400 bg-slate-300 dark:bg-slate-900 text-sm uppercase">

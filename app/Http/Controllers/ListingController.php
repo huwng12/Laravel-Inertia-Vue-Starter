@@ -70,7 +70,8 @@ class ListingController extends Controller implements HasMiddleware
             'tags' => ['nullable', 'string'],
             'email' => ['nullable', 'email'],
             'link' => ['nullable', 'url'],
-            'image' => ['nullable', 'file', 'max:3072', 'mimes:jpeg,jpg,png,webp']
+            'image' => ['nullable', 'file', 'max:3072', 'mimes:jpeg,jpg,png,webp'],
+            'category_id' => ['required', 'exists:categories,id']
         ]);
 
         $this->listingRepository->createListing($fields, $request->file('image'), $fields['tags'], $request->user());
@@ -91,6 +92,7 @@ class ListingController extends Controller implements HasMiddleware
             'canModify' => Auth::user() ? Auth::user()->can('modify', $listing) : null,
             'comments' => $listing->comments()->where('status', '1')->latest()->get(),
             'status' => session('status'),
+            'category_name' => $listing->getCategoryName(),
         ]);
     }
 
@@ -112,14 +114,14 @@ class ListingController extends Controller implements HasMiddleware
     public function update(Request $request, Listing $listing)
     {
         Gate::authorize(('modify'), $listing);
-
         $fields = $request->validate([
             'title' => ['required', 'max:255'],
             'desc' => ['required'],
             'tags' => ['nullable', 'string'],
             'email' => ['nullable', 'email'],
             'link' => ['nullable', 'url'],
-            'image' => ['nullable', 'file', 'max:3072', 'mimes:jpeg,jpg,png,webp']
+            'image' => ['nullable', 'file', 'max:3072', 'mimes:jpeg,jpg,png,webp'],
+            'category_id' => ['required', 'exists:categories,id']
         ]);
 
         $this->listingRepository->updateListing($listing->id, $fields, $request->file('image'), $fields['tags']);

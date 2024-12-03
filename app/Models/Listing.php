@@ -17,6 +17,7 @@ class Listing extends Model
         'link',
         'image',
         'approved',
+        'category_id'
     ];
 
     public function user()
@@ -32,6 +33,11 @@ class Listing extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function getCategoryName()
+    {
+        return $this->category ? $this->category->name : null;
     }
 
     public function scopeFilter($query, array $filter)

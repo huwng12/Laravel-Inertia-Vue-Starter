@@ -38,9 +38,10 @@ class ListingRepository implements ListingRepositoryInterface
         if (!$listing) {
             return false;
         }
-
         if ($image) {
-            Storage::disk('public')->delete($listing->image);
+            if ($listing->image) {
+                Storage::disk('public')->delete($listing->image);
+            }
             $fields['image'] = Storage::disk('public')->put('images/listing', $image);
         } else {
             $fields['image'] = $listing->image;

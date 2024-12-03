@@ -27,7 +27,12 @@ Route::get('/', [ListingController::class, 'index'])->name('home');
 Route::resource('listings', ListingController::class)->except('index');
 
 //Listing Category
-Route::get('/category/{categoryId}', [CategoryController::class, 'index'])->name('category.index');
+Route::get('/category', [CategoryController::class, 'list'])->name('category.list');
+Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
+Route::post('/category/create', [CategoryController::class, 'store'])->name('category.store');
+Route::put('/category/active/{categoryId}', [CategoryController::class, 'active'])->name('category.active');
+Route::delete('/category/delete/{categoryId}', [CategoryController::class, 'delete'])->name('category.delete');
+Route::get('/category/{categoryId}', [CategoryController::class, 'index'])->where('categoryId', '[0-9]+')->name('category.index');
 
 //Admin routes
 Route::middleware(['auth', 'verified', Admin::class])

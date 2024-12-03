@@ -1,7 +1,7 @@
 <script setup>
 import Container from '../../Components/Container.vue'
 import Comment from '../../Components/Comment.vue'
-import { router } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 
 const props = defineProps({
     listing: Object,
@@ -9,7 +9,9 @@ const props = defineProps({
     canModify: Boolean,
     comments: Object,
     status: String,
+    category_name: String
 })
+console.log(props.listing);
 const deleteListing = () => {
     if (confirm('Are you sure you want to delete this listing?')) {
         router.delete(route('listings.destroy', listing.id))
@@ -42,6 +44,19 @@ const approved = (listing) => {
             :class="listing.approved ? 'bg-red-500' : 'bg-green-500'">{{
                 listing.approved ? 'Disapproved it' : 'Approved it'
             }}</button>
+    </div>
+
+    <!-- Breadcrumbs -->
+    <div class="mb-4">
+        <Link class="text-link font-bold" :href="route('home')">Home</Link>
+        >
+        <Link class="text-link font-bold" :href="route('category.index', { categoryId: listing.category_id })">
+        {{ category_name }}
+        </Link>
+        >
+        <a class="text-link font-bold">
+            {{ listing.title ? listing.title.substring(0, 50) + ' ...' : listing.title }}
+        </a>
     </div>
 
     <Container class="gap-4">
