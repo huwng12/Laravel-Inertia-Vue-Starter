@@ -131,7 +131,7 @@ const approved = (listing) => {
         </div>
 
         <!-- Description -->
-        <p>{{ listing.desc }}</p>
+        <p v-html="listing.desc"></p>
 
     </Container>
     <Comment :listing="listing" :comments="comments" class="w-full" />

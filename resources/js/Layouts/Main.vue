@@ -3,7 +3,6 @@ import { switchTheme } from "../theme";
 import NavLink from "../Components/NavLink.vue";
 import { computed, ref } from "vue";
 import { Link, usePage } from "@inertiajs/vue3";
-import { defineProps } from "vue";
 
 const page = usePage();
 

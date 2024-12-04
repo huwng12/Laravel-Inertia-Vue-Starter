@@ -1,9 +1,11 @@
 import "./bootstrap";
 import "../css/app.css";
+import "../css/style.css";
 
 import { createApp, h } from "vue";
 import { createInertiaApp, Head, Link } from "@inertiajs/vue3";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
+import CKEditor from '../js/Components/CKEditor.vue';
 
 import Main from "./Layouts/Main.vue";
 import { setThemeOnLoad } from "./theme";
@@ -23,6 +25,7 @@ createInertiaApp({
             .use(ZiggyVue)
             .component("Head", Head)
             .component("Link", Link)
+            .component('CKEditor', CKEditor)
             .mount(el);
     },
     progress: {
