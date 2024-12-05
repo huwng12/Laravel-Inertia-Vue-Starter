@@ -222,11 +222,15 @@ const config = computed(() => {
         }
     };
 });
+
 const emit = defineEmits(['update:modelValue']);
 const onUpdate = (event) => {
-    // console.log('CKEditor model updated:', event);
     emit('update:modelValue', event);
 };
+
+const props = defineProps({
+    modelValue: String
+});
 
 onMounted(() => {
     isLayoutReady.value = true;

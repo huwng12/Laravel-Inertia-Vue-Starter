@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Profile;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreListingRequest extends FormRequest
+class DeleteAccountRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ class StoreListingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'password' => ['sometimes', 'required', 'min:3'],
         ];
     }
 }

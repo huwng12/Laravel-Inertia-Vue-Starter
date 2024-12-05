@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Admin\UpdateRoleRequest;
 use App\Models\Listing;
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\Listing\ListingRepositoryInterface;
-use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
@@ -38,14 +38,9 @@ class AdminController extends Controller
         ]);
     }
 
-    public function role(Request $request, User $user)
+    public function role(UpdateRoleRequest $request, User $user)
     {
-        $request->validate([
-            'role' => 'required|string'
-        ]);
-        // $user->update(['role' => $request->role]);
         $this->userRepository->updateRole($user->id, $request->role);
-
         return redirect()->route('admin.index')->with(
             'status',
             "User's role changed to {$request->role} successfully"
@@ -54,9 +49,7 @@ class AdminController extends Controller
 
     public function approve(Listing $listing)
     {
-        // $listing->update(['approved' => !$listing->approved]);
         $this->listingRepository->updateListingStatus($listing->id);
-
         $msg = $listing->approved ? 'approved' : 'disapproved';
         return back()->with('status', "Listing {$msg} successfully");
     }

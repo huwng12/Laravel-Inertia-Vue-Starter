@@ -3,6 +3,7 @@ import { useForm } from '@inertiajs/vue3';
 import TextArea from '../Components/TextArea.vue'
 import Container from '../Components/Container.vue'
 import SessionMessages from './SessionMessages.vue';
+import ErrorMessages from './ErrorMessages.vue';
 
 const props = defineProps({
     comments: Object,
@@ -41,17 +42,18 @@ const submitComment = () => {
 <template>
     <Container class="container mt-6">
         <p class="w-full text-gray-500 border-b pb-2 pointer-events-none">Comments</p>
-        <form @submit.prevent="submitComment" class="items-center space-y-4 mb-6">
+        <form @submit.prevent="submitComment" class="items-center space-y-4 mb-8">
             <TextArea class="mt-2" rows="2" placeholder="Add a comment" icon="comment" v-model="form.comment" />
-            <div class="flex">
+            <div class="flex gap-6 items-center">
                 <button type="submit" :disabled="form.processing"
                     class="px-6 py-2 rounded-lg bg-slate-950 text-white disabled:bg-slate-300 disabled:cursor-wait">
                     Submit
                 </button>
+                <ErrorMessages :errors="form.errors" />
                 <SessionMessages v-if="form.recentlySuccessful" :status="'Comment added successfully'" class="m-4" />
-
             </div>
         </form>
+
 
         <div>
             <div v-for="comment in comments" :key="comment.id" class="flex py-4 space-x-4 items-start">

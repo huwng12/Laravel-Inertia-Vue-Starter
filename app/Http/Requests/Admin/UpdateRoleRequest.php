@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateListingRequest extends FormRequest
+class UpdateRoleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,15 @@ class UpdateListingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'role' => 'required|string'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'role.required' => 'Role is required',
+            'role.string' => 'Role must be a string'
         ];
     }
 }

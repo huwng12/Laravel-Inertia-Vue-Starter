@@ -32,7 +32,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Chia sẻ categories toàn cục
         Inertia::share('categories', function () {
             // Caching để giảm tải database nếu categories ít thay đổi
             return cache()->remember('categories', 60, function () {

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Models\Category;
 use App\Repositories\Category\CategoryRepositoryInterface;
-use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -52,11 +52,10 @@ class CategoryController extends Controller
         return redirect()->route('category.list')->with('status', 'Category deleted successfully');
     }
 
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        $fields = $request->validate([
-            'name' => 'required|string|max:255|unique:categories',
-        ]);
+        $fields = $request->validated();
+
         $this->categoryRepository->createCategory($fields);
         return redirect()->route('category.list')->with('status', 'Category created successfully');
     }

@@ -15,7 +15,6 @@ const props = defineProps({
     listing: Object,
     categories: Array
 })
-
 const form = useForm({
     'title': props.listing.title,
     'desc': props.listing.desc,
@@ -26,11 +25,7 @@ const form = useForm({
     'category_id': props.listing.category_id,
     _method: 'PUT'
 })
-console.log('form:', form.desc);
 
-watch(() => form.desc, (newValue) => {
-    console.log('Updated desc:', newValue);
-});
 </script>
 
 <template>

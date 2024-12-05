@@ -11,7 +11,6 @@ const props = defineProps({
     status: String,
     category_name: String
 })
-console.log(props.listing);
 const deleteListing = () => {
     if (confirm('Are you sure you want to delete this listing?')) {
         router.delete(route('listings.destroy', listing.id))
@@ -131,7 +130,7 @@ const approved = (listing) => {
         </div>
 
         <!-- Description -->
-        <p v-html="listing.desc"></p>
+        <p v-html="listing.desc" class="description-content pl-6"></p>
 
     </Container>
     <Comment :listing="listing" :comments="comments" class="w-full" />

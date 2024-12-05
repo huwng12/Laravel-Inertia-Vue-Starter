@@ -23,7 +23,8 @@ const searchTag = (tag) => {
             <Link :href="route('listings.show', listing.id)">
             <img :src="listing.image
                 ? `/storage/${listing.image}`
-                : `/storage/images/listing/default.jpg`" class="w-full h-full object-cover object-center bg-slate-300">
+                : `/storage/images/listing/default.jpg`"
+                class="w-[315px] h-[220px] object-cover object-center bg-slate-300">
             </Link>
         </div>
 

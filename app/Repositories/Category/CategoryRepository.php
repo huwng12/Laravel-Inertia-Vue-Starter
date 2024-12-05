@@ -51,5 +51,7 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function deleteCategory(string $categoryId): void
     {
         Category::where('id', $categoryId)->delete();
+        Cache::forget('categories'); //xóa cache để lấy dữ liệu mới cập nhật cho main layout
+
     }
 }

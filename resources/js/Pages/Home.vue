@@ -3,6 +3,7 @@ import Card from '../Components/Card.vue';
 import PaginationLinks from '../Components/PaginationLinks.vue';
 import InputField from '../Components/InputField.vue';
 import { router, useForm } from '@inertiajs/vue3';
+import HotNews from '../Components/HotNews.vue';
 
 const params = route().params;
 const props = defineProps({
@@ -46,7 +47,20 @@ const search = () => {
         </div>
     </div>
 
+    <div class="relative items-center">
+        <div class="mr-4">Hot News</div>
+        <div class="absolute left-[15%] right-0 top-1/2 transform -translate-y-1/2 border-t-2 border-gray-500 z-0">
+        </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4 mb-6">
+        <div v-for="listing in listings.data.slice(0, 1)" :key="listing.id">
+            <HotNews :listing="listing" />
+        </div>
+    </div>
+
     <div v-if="Object.keys(listings.data).length">
+        <p>Latest News</p>
         <div class="grid grid-cols-3 gap-4">
             <div v-for="listing in listings.data" :key="listing.id">
                 <Card :listing="listing" />

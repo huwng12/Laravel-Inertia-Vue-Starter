@@ -11,5 +11,16 @@
         dark:text-indigo-400 
         dark:hover:text-indigo-500;
     }
-    
+    .description-content {
+        word-wrap: break-word; /* Xuống dòng khi từ quá dài */
+        overflow-wrap: break-word; /* Hỗ trợ thêm cho trình duyệt cũ */
+        white-space: normal; /* Cho phép xuống dòng khi gặp khoảng trắng */
+        max-width: 100%; /* Đảm bảo không vượt quá vùng chứa */
+    }
+    .article_title{
+        @apply relative z-10;
+    }
+    .article_title::after {
+        @apply absolute border-bottom left-[20%] border-black transform -translate-x-[50%] ; 
+    }
 }

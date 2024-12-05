@@ -5,7 +5,6 @@ const emits = defineEmits(['image']);
 const props = defineProps({
     listingImage: String
 });
-console.log(props.listingImage);
 const currentImage = props.listingImage ? `/storage/${props.listingImage}` : null;
 const isShowReload = ref(false);
 
