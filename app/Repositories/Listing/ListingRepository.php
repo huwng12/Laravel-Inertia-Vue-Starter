@@ -13,12 +13,24 @@ class ListingRepository implements ListingRepositoryInterface
     {
         return Listing::whereHas('user', function (Builder $query) {
             $query->where('role', '!=', 'suspended');
-        })->with('user')
+        })->with('user', 'comments')
             ->where('approved', true)
             ->filter($filters)
             ->latest()
             ->paginate($perPage)
             ->withQueryString();
+    }
+
+    public function getHotNewsListings()
+    {
+        $hot_news = Listing::whereHas('user', function (Builder $query) {
+            $query->where('role', '!=', 'suspended');
+        })->with('user', 'comments')
+            ->where('approved', true)
+            ->orderByDesc('view')
+            ->limit(3)
+            ->get();
+        return $hot_news;
     }
 
     public function createListing(array $fields, $image = null, $tags = null, $user)

@@ -29,9 +29,11 @@ class ListingController extends Controller implements HasMiddleware
     public function index()
     {
         $listings = $this->listingRepository->getAllListings(request(['search', 'user_id', 'tag']), 6);
+        $hot_news = $this->listingRepository->getHotNewsListings();
         return inertia('Home', [
             'listings' => $listings,
             'searchTerm' => request('search'),
+            'hot_news' => $hot_news,
         ]);
     }
 
@@ -52,6 +54,7 @@ class ListingController extends Controller implements HasMiddleware
     public function show(Listing $listing)
     {
         Gate::authorize('view', $listing);
+        $listing->increment('view');
         return inertia('Listings/Show', [
             'listing' => $listing,
             'user' => $listing->user->only('name', 'id'),

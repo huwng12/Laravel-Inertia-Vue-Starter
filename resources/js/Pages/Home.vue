@@ -4,13 +4,16 @@ import PaginationLinks from '../Components/PaginationLinks.vue';
 import InputField from '../Components/InputField.vue';
 import { router, useForm } from '@inertiajs/vue3';
 import HotNews from '../Components/HotNews.vue';
+import CategoryTitle from '../Components/CategoryTitle.vue';
+import { computed } from 'vue';
 
 const params = route().params;
+
 const props = defineProps({
     listings: Object,
     searchTerm: String,
+    hot_news: Object,
 });
-// console.log(props.listings.data);
 const userName = params.user_id ? props.listings.data.find(listing => listing.user.id == params.user_id).user.name : null;
 const form = useForm({
     search: props.searchTerm,
@@ -18,6 +21,10 @@ const form = useForm({
 const search = () => {
     router.get(route('home'), { search: form.search, user_id: params.user_id, tag: params.tag });
 }
+
+const shouldShowHotNews = computed(() => {
+    return props.hot_news && !props.searchTerm && !params.user_id && !params.tag;
+});
 
 </script>
 
@@ -47,20 +54,26 @@ const search = () => {
         </div>
     </div>
 
-    <div class="relative items-center">
-        <div class="mr-4">Hot News</div>
-        <div class="absolute left-[15%] right-0 top-1/2 transform -translate-y-1/2 border-t-2 border-gray-500 z-0">
+    <div v-if="shouldShowHotNews">
+        <CategoryTitle :label="'Hot News'" />
+        <div class="grid grid-cols-3 gap-4 mb-8">
+            <div class="col-span-2">
+                <HotNews :listing="hot_news[0]" />
+            </div>
+            <div class="col-span-1 flex flex-col gap-y-3">
+                <div>
+                    <HotNews :listing="hot_news[1]" variant="small" />
+                </div>
+                <div>
+                    <HotNews :listing="hot_news[2]" variant="small" />
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="grid grid-cols-3 gap-4 mb-6">
-        <div v-for="listing in listings.data.slice(0, 1)" :key="listing.id">
-            <HotNews :listing="listing" />
-        </div>
-    </div>
 
     <div v-if="Object.keys(listings.data).length">
-        <p>Latest News</p>
+        <CategoryTitle :label="'Latest News'" />
         <div class="grid grid-cols-3 gap-4">
             <div v-for="listing in listings.data" :key="listing.id">
                 <Card :listing="listing" />

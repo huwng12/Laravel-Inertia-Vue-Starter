@@ -8,6 +8,8 @@ interface ListingRepositoryInterface
 {
     public function getAllListings(array $filters, int $perPage): LengthAwarePaginator;
 
+    public function getHotNewsListings();
+
     public function createListing(array $fields, $image = null, $tags = null, $user);
 
     public function updateListing(int $listingId, array $fields, $image = null, $tags = null);
