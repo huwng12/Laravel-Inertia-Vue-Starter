@@ -13,6 +13,8 @@ use App\Repositories\Profile\ProfileRepositoryInterface;
 use App\Repositories\Profile\ProfileRepository;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Category\CategoryRepository;
+use App\Repositories\Notification\NotificationRepositoryInterface;
+use App\Repositories\Notification\NotificationRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ListingRepositoryInterface::class, ListingRepository::class);
         $this->app->bind(ProfileRepositoryInterface::class, ProfileRepository::class);
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
+        $this->app->bind(NotificationRepositoryInterface::class, NotificationRepository::class);
     }
 
     /**

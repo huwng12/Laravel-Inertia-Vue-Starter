@@ -3,6 +3,7 @@ import CategoryCard from '../../Components/CategoryCard.vue';
 import PaginationLinks from '../../Components/PaginationLinks.vue';
 import InputField from '../../Components/InputField.vue';
 import { router, useForm } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 const params = route().params;
 const props = defineProps({
@@ -10,14 +11,26 @@ const props = defineProps({
     searchTerm: String,
     category_name: String,
 });
-console.log(props.listings);
-const userName = params.user_id ? props.listings.data.find(listing => listing.user.id == params.user_id).user.name : null;
+const userName = computed(() => {
+    if (params.user_id) {
+        return props.listings.data.find(listing => listing.user.id == params.user_id).user.name
+    }
+    return null;
+})
 const form = useForm({
     search: props.searchTerm,
 });
 const search = () => {
     router.get(route('category.index', { categoryId: props.listings.data[0].category_id }), { search: form.search, user_id: params.user_id, tag: params.tag });
 }
+
+const filterLinks = computed(() => {
+    const links = [];
+    if (params.tag) links.push({ label: params.tag, href: route('category.index', { ...params, tag: null, page: null }) });
+    if (params.search) links.push({ label: params.search, href: route('category.index', { ...params, search: null, page: null }) });
+    if (params.user_id) links.push({ label: userName, href: route('category.index', { ...params, user_id: null, page: null }) });
+    return links;
+})
 
 </script>
 
@@ -32,25 +45,17 @@ const search = () => {
         </a>
     </div>
     <div class="flex items-center justify-between mb-4">
-
+        <div class="flex items-center gap-2">
+            <div v-for="(link, index) in filterLinks" :key="index">
+                <Link :href="link.href" class="flex items-center rounded-md bg-indigo-500 text-white px-2 py-1">
+                {{ link.label }} <i class="fas fa-times ml-2"></i>
+                </Link>
+            </div>
+        </div>
         <div class="w-1/4">
             <form @submit.prevent="search">
                 <InputField icon="search" type="search" placeholder="Search..." v-model="form.search" />
             </form>
-        </div>
-        <div class="flex items-center gap-2">
-            <Link v-if="params.tag" :href="route('category.index', { ...params, tag: null, page: null })"
-                class="flex items-center rounded-md bg-indigo-500 text-white px-2 py-1">
-            {{ params.tag }} <i class="fas fa-times ml-2"></i>
-            </Link>
-            <Link v-if="params.search" :href="route('category.index', { ...params, search: null, page: null })"
-                class="flex items-center rounded-md bg-indigo-500 text-white px-2 py-1">
-            {{ params.search }} <i class="fas fa-times ml-2"></i>
-            </Link>
-            <Link v-if="params.user_id" :href="route('category.index', { ...params, user_id: null, page: null })"
-                class="flex items-center rounded-md bg-indigo-500 text-white px-2 py-1">
-            {{ userName }} <i class="fas fa-times ml-2"></i>
-            </Link>
         </div>
     </div>
 

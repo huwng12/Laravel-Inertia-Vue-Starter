@@ -7,7 +7,6 @@ const props = defineProps({
     categoryList: Object,
     status: String
 });
-console.log(props.categoryList);
 
 const activeCategory = (category) => {
     router.put(route('category.active', category.id));

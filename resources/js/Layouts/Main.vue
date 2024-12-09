@@ -4,63 +4,64 @@ import NavLink from "../Components/NavLink.vue";
 import { computed, ref } from "vue";
 import { Link, usePage } from "@inertiajs/vue3";
 
-const page = usePage();
+const user = computed(() => usePage().props.auth.user);
+const showState = ref({ show: false, showMore: false });
 
-const user = computed(() => page.props.auth.user);
-const show = ref(false);
-const showMoreButton = ref(false);
+const toggle = (key) => (showState.value[key] = !showState.value[key]);
 
-const showMore = () => {
-    showMoreButton.value = !showMoreButton.value;
-};
-
-const props = defineProps({
-    categories: Object
-});
+defineProps({ categories: Object });
 </script>
 
 <template>
+    <div v-show="showState.show" @click="toggle('show')" class="fixed inset-0 z-40"></div>
+    <div v-show="showState.showMore" @click="toggle('showMore')" class="fixed inset-0 z-40"></div>
 
-    <div v-show="show" @click="show = false" class="fixed inset-0 z-40"></div>
-    <div v-show="showMoreButton" @click="showMoreButton = false" class="fixed inset-0 z-40"></div>
     <header class="bg-slate-800 text-white">
         <nav class="p-6 mx-auto w-full flex items-center justify-between">
             <NavLink routeName="home" componentName="Home">Home</NavLink>
+
             <!-- Categories -->
             <div class="flex relative items-center text-lg gap-6 ">
                 <div v-for="(category, i) in categories.slice(0, 6)" :key="i" class="font-bold">
                     <Link :href="route('category.index', { categoryId: category.id })"
                         class="hover:bg-slate-700 p-4 rounded-lg cursor-pointer" :class="{
-                            'bg-slate-700': $page.url === `/category/${category.id}`,
-                            'hover:bg-slate-700': true
+                            'bg-slate-700': $page.url === `/category/${category.id}`, 'hover:bg-slate-700': true
                         }">
                     {{ category.name }}
                     </Link>
                 </div>
-                <div v-if="categories.length > 6" class="dropdown m-menu-fw ">
-                    <a href="#" @click.prevent="showMore" class="dropdown-toggle font-bold">
+                <div v-if="categories.length > 6">
+                    <a href="#" @click.prevent="toggle('showMore')" class="font-bold">
                         More <span><i class="fa fa-angle-down"></i></span>
                     </a>
                 </div>
-                <ul v-show="showMoreButton"
-                    class="absolute left-0 top-full mt-4 grid grid-cols-4 w-auto z-40 dropdown-menu bg-slate-800 text-white rounded-lg border-slate-300 border overflow-hidden overflow-y-auto max-h-64">
-                    <li v-for="(category, index) in categories.slice(6)" :key="category.id">
-                        <a :href="route('category.index', { categoryId: category.id })"
+                <ul v-show="showState.showMore"
+                    class="absolute left-0 top-full mt-4 grid grid-cols-4 w-auto z-40 bg-slate-800 text-white rounded-lg border-slate-300 border overflow-y-auto max-h-64">
+                    <li v-for="category in categories.slice(6)" :key="category.id">
+                        <Link @click="toggle('showMore')" :href="route('category.index', { categoryId: category.id })"
                             class="block px-4 py-2 w-full hover:bg-slate-700"
-                            :class="{ 'bg-slate-700': $page.url === `/category/${category.id}`, 'hover:bg-slate-700': true }">{{
-                                category.name
-                            }}</a>
+                            :class="{ 'bg-slate-700': $page.url === `/category/${category.id}` }">
+                        {{ category.name }}
+                        </Link>
                     </li>
                 </ul>
             </div>
 
 
+            <!-- Auth -->
             <div class="flex items-center space-x-6">
-                <!-- Auth -->
-                <div v-if="user" class="relative flex items-center justify-between gap-2">
-                    <div @click="show = !show"
+                <div v-if="user" class="relative flex items-center justify-between gap-3">
+                    <!-- Notification -->
+                    <Link class="relative inline-block mx-2" :href="route('notification.index')">
+                    <i class="fa-solid fa-bell"></i>
+                    <span
+                        class="absolute bottom-3 left-3 flex h-5 w-5 items-center justify-center bg-red-500 rounded-full text-xs text-white">2</span>
+                    </Link>
+
+                    <!-- Management -->
+                    <div @click="toggle('show')"
                         class="flex items-center gap-2 px-3 py-1 rounded-lg hover:bg-slate-700 cursor-pointer"
-                        :class="{ 'bg-slate-700': show }">
+                        :class="{ 'bg-slate-700': showState.show }">
                         <p>{{ user.name }}</p>
                         <i class="fa-solid fa-angle-down"></i>
                     </div>
@@ -69,7 +70,8 @@ const props = defineProps({
                     <i class="fa-solid fa-lock"></i>
                     </Link>
 
-                    <div v-if="show" @click="show = false"
+
+                    <div v-if="showState.show" @click="toggle('show')"
                         class="absolute z-50 top-16 right-0 bg-slate-800 text-white rounded-lg border-slate-300 border overflow-hidden w-40">
                         <Link v-if="$page.props.auth.user.role === 'admin'" :href="route('category.list')"
                             class="block w-full px-6 py-3 hover:bg-slate-700 text-lefts">

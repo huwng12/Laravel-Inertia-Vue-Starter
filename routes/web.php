@@ -42,6 +42,9 @@ Route::middleware(['auth', 'verified', Admin::class])
         Route::get('/users/{user}', 'show')->name('user.show');
         Route::put('/admin/{user}/role', 'role')->name('admin.role');
         Route::put('/listings/{listing}/approve', 'approve')->name('admin.approve');
+
+        Route::get('/notifications', 'indexNotification')->name('notification.index');
+        Route::post('/notifications', 'storeNotification')->name('notification.store');
     });
 
 

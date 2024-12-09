@@ -7,16 +7,21 @@ use App\Models\Listing;
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\Listing\ListingRepositoryInterface;
+use App\Repositories\Notification\NotificationRepositoryInterface;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class AdminController extends Controller
 {
     private $userRepository;
     private $listingRepository;
+    private $notificationRepository;
 
-    public function __construct(UserRepositoryInterface $userRepository, ListingRepositoryInterface $listingRepository)
+    public function __construct(UserRepositoryInterface $userRepository, ListingRepositoryInterface $listingRepository, NotificationRepositoryInterface $notificationRepository)
     {
         $this->userRepository = $userRepository;
         $this->listingRepository = $listingRepository;
+        $this->notificationRepository = $notificationRepository;
     }
 
     public function index()
@@ -52,5 +57,18 @@ class AdminController extends Controller
         $this->listingRepository->updateListingStatus($listing->id);
         $msg = $listing->approved ? 'approved' : 'disapproved';
         return back()->with('status', "Listing {$msg} successfully");
+    }
+
+    // Notifications
+    public function indexNotification()
+    {
+        $users = $this->userRepository->getAllUsers(request(['search', 'role']), null);
+        return inertia('Admin/SendNotification', ['users' => $users]);
+    }
+
+    public function storeNotification()
+    {
+        $this->notificationRepository->createNotification(request(['user_id', 'title', 'message']));
+        return redirect()->route('notification.index')->with('status', 'Notification sent successfully');
     }
 }

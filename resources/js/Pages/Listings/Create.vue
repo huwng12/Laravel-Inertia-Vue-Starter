@@ -22,9 +22,9 @@ const form = useForm({
 const props = defineProps({
     categories: Object,
 })
-watch(() => form.desc, (value) => {
-    console.log('Updated form.desc:', value);  // Kiểm tra giá trị sau mỗi thay đổi
-});
+// watch(() => form.desc, (value) => {
+//     console.log('Updated form.desc:', value);  // Kiểm tra giá trị sau mỗi thay đổi
+// });
 
 
 </script>
@@ -59,7 +59,7 @@ watch(() => form.desc, (value) => {
             </div>
 
             <div>
-                <label :for="label" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                     Description
                 </label>
                 <CKEditor v-model="form.desc" />

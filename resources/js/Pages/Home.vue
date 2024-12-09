@@ -14,10 +14,17 @@ const props = defineProps({
     searchTerm: String,
     hot_news: Object,
 });
-const userName = params.user_id ? props.listings.data.find(listing => listing.user.id == params.user_id).user.name : null;
+const userName = computed(() => {
+    if (params.user_id) {
+        return props.listings.data.find(listing => listing.user.id == params.user_id).user.name
+    }
+    return null;
+})
+
 const form = useForm({
     search: props.searchTerm,
 });
+
 const search = () => {
     router.get(route('home'), { search: form.search, user_id: params.user_id, tag: params.tag });
 }
@@ -26,6 +33,13 @@ const shouldShowHotNews = computed(() => {
     return props.hot_news && !props.searchTerm && !params.user_id && !params.tag;
 });
 
+const filterLinks = computed(() => {
+    const links = [];
+    if (params.tag) links.push({ label: params.tag, href: route('home', { ...params, tag: null, page: null }) });
+    if (params.search) links.push({ label: params.search, href: route('home', { ...params, search: null, page: null }) });
+    if (params.user_id) links.push({ label: userName.value, href: route('home', { ...params, user_id: null, page: null }) });
+    return links;
+})
 </script>
 
 <template>
@@ -34,18 +48,11 @@ const shouldShowHotNews = computed(() => {
 
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-2">
-            <Link v-if="params.tag" :href="route('home', { ...params, tag: null, page: null })"
-                class="flex items-center rounded-md bg-indigo-500 text-white px-2 py-1">
-            {{ params.tag }} <i class="fas fa-times ml-2"></i>
-            </Link>
-            <Link v-if="params.search" :href="route('home', { ...params, search: null, page: null })"
-                class="flex items-center rounded-md bg-indigo-500 text-white px-2 py-1">
-            {{ params.search }} <i class="fas fa-times ml-2"></i>
-            </Link>
-            <Link v-if="params.user_id" :href="route('home', { ...params, user_id: null, page: null })"
-                class="flex items-center rounded-md bg-indigo-500 text-white px-2 py-1">
-            {{ userName }} <i class="fas fa-times ml-2"></i>
-            </Link>
+            <div v-for="(link, index) in filterLinks" :key="index">
+                <Link :href="link.href" class="flex items-center rounded-md bg-indigo-500 text-white px-2 py-1">
+                {{ link.label }} <i class="fas fa-times ml-2"></i>
+                </Link>
+            </div>
         </div>
         <div class="w-1/4">
             <form @submit.prevent="search">
@@ -61,12 +68,8 @@ const shouldShowHotNews = computed(() => {
                 <HotNews :listing="hot_news[0]" />
             </div>
             <div class="col-span-1 flex flex-col gap-y-3">
-                <div>
-                    <HotNews :listing="hot_news[1]" variant="small" />
-                </div>
-                <div>
-                    <HotNews :listing="hot_news[2]" variant="small" />
-                </div>
+                <HotNews v-for="(news, index) in hot_news.slice(1, 3)" :key="index" :listing="news" variant="small">
+                </HotNews>
             </div>
         </div>
     </div>

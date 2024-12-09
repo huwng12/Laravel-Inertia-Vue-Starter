@@ -23,7 +23,6 @@ const updatePassword = () => {
         },
     });
 }
-console.log(form)
 </script>
 
 <template>

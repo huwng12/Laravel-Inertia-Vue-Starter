@@ -5,7 +5,6 @@ const params = route().params
 const props = defineProps({
     listing: Object,
 });
-console.log(props.listing)
 const searchUser = (id) => {
     router.get(route('home', { search: params.search, user_id: id, tag: params.tag }, { preserveScroll: true }));
 }
@@ -30,11 +29,9 @@ const searchTag = (tag) => {
 
         <!-- Title & user -->
         <div class="p-4">
-            <Link :href="route('listings.show', listing.id)">
             <h3 class="font-bold text-xl mb-2">
                 {{ listing.title.substring(0, 40) }}...
             </h3>
-            </Link>
 
             <p>Listed on {{ new Date(listing.created_at).toLocaleDateString() }} by
                 <button class="text-link" @click="searchUser(listing.user.id)">

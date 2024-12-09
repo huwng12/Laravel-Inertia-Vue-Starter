@@ -3,16 +3,16 @@
 namespace App\Repositories\User;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserRepository implements UserRepositoryInterface
 {
-    public function getAllUsers(array $filters, int $perPage): LengthAwarePaginator
+    public function getAllUsers(array $filters, ?int $perPage): LengthAwarePaginator
     {
-        return User::with('listings')
-            ->filter($filters)
-            ->paginate($perPage)
-            ->withQueryString();
+        $query = User::with('listings')->filter($filters);
+        $perPage = $perPage ?? $query->count();
+        return $query->paginate($perPage)->withQueryString();
     }
 
     public function getUserListings(int $userId, array $filters, int $perPage): LengthAwarePaginator
