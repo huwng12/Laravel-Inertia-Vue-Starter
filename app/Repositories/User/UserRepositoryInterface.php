@@ -11,4 +11,6 @@ interface UserRepositoryInterface
     public function getUserListings(int $userId, array $filters, int $perPage): LengthAwarePaginator;
 
     public function updateRole(int $userId, string $role): bool;
+
+    public function getAllUsersExceptAdmin(array $filters, ?int $perPage): LengthAwarePaginator;
 }

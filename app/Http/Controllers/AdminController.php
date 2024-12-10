@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Admin\UpdateRoleRequest;
+use App\Http\Requests\Admin\NotificationRequest;
 use App\Models\Listing;
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
@@ -62,11 +63,11 @@ class AdminController extends Controller
     // Notifications
     public function indexNotification()
     {
-        $users = $this->userRepository->getAllUsers(request(['search', 'role']), null);
-        return inertia('Admin/SendNotification', ['users' => $users]);
+        $users = $this->userRepository->getAllUsersExceptAdmin(request(['search', 'role']), null);
+        return inertia('Admin/SendNotification', ['users' => $users, 'status' => session('status')]);
     }
 
-    public function storeNotification()
+    public function storeNotification(NotificationRequest $request)
     {
         $this->notificationRepository->createNotification(request(['user_id', 'title', 'message']));
         return redirect()->route('notification.index')->with('status', 'Notification sent successfully');

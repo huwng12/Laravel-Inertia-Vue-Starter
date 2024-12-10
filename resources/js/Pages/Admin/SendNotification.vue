@@ -2,6 +2,7 @@
 import Container from '../../Components/Container.vue';
 import Title from '../../Components/Title.vue';
 import ErrorMessages from '../../Components/ErrorMessages.vue';
+import SessionMessages from '../../Components/SessionMessages.vue';
 import InputField from '../../Components/InputField.vue';
 import TextArea from '../../Components/TextArea.vue';
 import { useForm } from '@inertiajs/vue3';
@@ -9,12 +10,13 @@ import PrimaryBtn from '../../Components/PrimaryBtn.vue';
 
 const props = defineProps({
     users: Object,
+    status: String,
 });
 
 const form = useForm({
     'user_id': '',
     'title': '',
-    'body': '',
+    'message': '',
 });
 
 </script>
@@ -24,6 +26,8 @@ const form = useForm({
     <Head title="- Send Notification" />
     <Container>
         <Title class="mb-6">Send Notification</Title>
+        <ErrorMessages :errors="form.errors" />
+        <SessionMessages :status="status" />
         <form @submit.prevent="form.post(route('notification.store'))">
             <div class="mb-6 space-y-4">
                 <div class="flex gap-4 items-center">
@@ -31,7 +35,7 @@ const form = useForm({
                     <select id="user" v-model="form.user_id"
                         class="text-slate-800 bg-slate-200 border-0 outline-0 rounded-lg text-sm py-1 overflow-y-auto max-h-[50px]">
                         <option disabled selected value="">Please select a user</option>
-                        <option value="all">All</option>
+                        <!-- <option value="*">All</option> -->
                         <option v-for="(user, index) in users.data" :key="index" :value="user.id">
                             {{
                                 user.name }}
@@ -39,7 +43,7 @@ const form = useForm({
                     </select>
                 </div>
                 <InputField label="Title" icon="heading" placeholder="Notification title" v-model="form.title" />
-                <InputField label="Message" icon="font" placeholder="Type your message" v-model="form.body" />
+                <InputField label="Message" icon="font" placeholder="Type your message" v-model="form.message" />
             </div>
             <PrimaryBtn>Send Notification</PrimaryBtn>
         </form>

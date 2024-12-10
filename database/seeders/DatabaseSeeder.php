@@ -7,6 +7,8 @@ use App\Models\Listing;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,6 +17,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        User::create([
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('123'),
+            'role' => 'admin',
+            'remember_token' => Str::random(10),
+        ]);
+
         User::factory(7)->create();
         Category::insert([
             ['name' => 'World', 'status' => 1],

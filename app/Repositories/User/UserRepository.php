@@ -29,4 +29,11 @@ class UserRepository implements UserRepositoryInterface
     {
         return User::find($userId)->update(['role' => $role]);
     }
+
+    public function getAllUsersExceptAdmin(array $filters, ?int $perPage): LengthAwarePaginator
+    {
+        $query = User::with('listings')->where('role', '!=', 'admin')->filter($filters);
+        $perPage = $perPage ?? $query->count();
+        return $query->paginate($perPage)->withQueryString();
+    }
 }
