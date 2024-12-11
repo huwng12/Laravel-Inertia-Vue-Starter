@@ -7,6 +7,7 @@ import InputField from '../../Components/InputField.vue';
 import TextArea from '../../Components/TextArea.vue';
 import { useForm } from '@inertiajs/vue3';
 import PrimaryBtn from '../../Components/PrimaryBtn.vue';
+import { watch } from 'vue';
 
 const props = defineProps({
     users: Object,
@@ -19,6 +20,14 @@ const form = useForm({
     'message': '',
 });
 
+const sendNotification = () => {
+    form.post(route('notification.store'), {
+        onFinish: () => {
+            form.reset('user_id', 'title', 'message');
+        },
+    });
+};
+
 </script>
 
 <template>
@@ -28,7 +37,7 @@ const form = useForm({
         <Title class="mb-6">Send Notification</Title>
         <ErrorMessages :errors="form.errors" />
         <SessionMessages :status="status" />
-        <form @submit.prevent="form.post(route('notification.store'))">
+        <form @submit.prevent="sendNotification">
             <div class="mb-6 space-y-4">
                 <div class="flex gap-4 items-center">
                     <label for="user" class="block text-sm font-medium text-slate-700 dark:text-slate-300">To </label>
@@ -38,7 +47,7 @@ const form = useForm({
                         <!-- <option value="*">All</option> -->
                         <option v-for="(user, index) in users.data" :key="index" :value="user.id">
                             {{
-                                user.name }}
+                                user.id }}
                         </option>
                     </select>
                 </div>

@@ -11,17 +11,19 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NotificationCreated implements ShouldBroadcast
+class NotificationCreated implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $notification;
+    public $userId;
     /**
      * Create a new event instance.
      */
-    public function __construct($notification)
+    public function __construct($notification, $userId)
     {
         $this->notification = $notification;
+        $this->userId = $userId;
     }
 
     /**
@@ -32,7 +34,7 @@ class NotificationCreated implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('notifications'),
+            new PrivateChannel('user.' . $this->userId),
         ];
     }
     // public function broadcastOn()
@@ -42,8 +44,8 @@ class NotificationCreated implements ShouldBroadcast
     //     ];
     // }
 
-    // public function broadcastAs()
-    // {
-    //     return 'my-event';
-    // }
+    public function broadcastAs()
+    {
+        return 'notification.created';
+    }
 }

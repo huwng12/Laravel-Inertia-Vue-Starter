@@ -25,6 +25,9 @@ class AuthenticateController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
+            // Lưu trạng thái đăng nhập vào session của PHP
+            session(['user_logged_in' => true]);
+
             return redirect()->route('home');
         }
 

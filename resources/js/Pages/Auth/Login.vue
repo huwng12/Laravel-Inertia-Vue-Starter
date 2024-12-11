@@ -20,8 +20,12 @@ defineProps({
 });
 
 const submit = () => {
+    // localStorage.setItem('user_logged_in', 'true');
     form.post(route("login"), {
-        onFinish: () => form.reset('password'),
+        onFinish: () => {
+            form.reset('password');
+            window.dispatchEvent(new Event('userLoggedIn'));
+        },
     });
 };
 </script>

@@ -72,4 +72,10 @@ class AdminController extends Controller
         $this->notificationRepository->createNotification(request(['user_id', 'title', 'message']));
         return redirect()->route('notification.index')->with('status', 'Notification sent successfully');
     }
+
+    public function showNotification(User $user)
+    {
+        $notification = $this->notificationRepository->getNotifications();
+        return inertia('Admin/ShowNotification', ['user' => $user, 'notification' => $notification]);
+    }
 }

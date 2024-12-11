@@ -11,6 +11,7 @@ class Notification extends Model
 
     protected $fillable = [
         'user_id',
+        'from_user_id',
         // 'listing_id',
         'title',
         'message',
@@ -22,8 +23,8 @@ class Notification extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function listing()
-    {
-        return $this->belongsTo(Listing::class);
-    }
+    // public function listing()
+    // {
+    //     return $this->belongsTo(Listing::class);
+    // }
 }
