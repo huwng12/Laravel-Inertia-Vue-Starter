@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->integer('from_user_id');
-            // $table->foreignId('listing_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('listing_id')->unsigned()->nullable()->constrained('listings')->onDelete('set null');
+            $table->string('type');
             $table->string('title');
             $table->text('message');
             $table->boolean('is_read')->default(false);

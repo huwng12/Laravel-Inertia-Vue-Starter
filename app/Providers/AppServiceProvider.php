@@ -15,6 +15,8 @@ use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Notification\NotificationRepositoryInterface;
 use App\Repositories\Notification\NotificationRepository;
+use App\Repositories\Comment\CommentRepositoryInterface;
+use App\Repositories\Comment\CommentRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProfileRepositoryInterface::class, ProfileRepository::class);
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
         $this->app->bind(NotificationRepositoryInterface::class, NotificationRepository::class);
+        $this->app->bind(CommentRepositoryInterface::class, CommentRepository::class);
     }
 
     /**

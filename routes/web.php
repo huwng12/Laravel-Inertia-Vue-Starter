@@ -15,6 +15,7 @@ Route::middleware('auth')->group(function () {
 
     //Get Notification
     Route::get('/notification', [NotificationController::class, 'show'])->name('notification.show');
+    Route::put('/notification/{id}', [NotificationController::class, 'updateNotificationIsRead'])->name('notification.update');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('verified')->name('dashboard');
 

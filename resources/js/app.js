@@ -25,19 +25,19 @@ createInertiaApp({
         const app = createApp({ render: () => h(App, props) });
 
         // Lấy user_id từ $page.props trong context của Inertia
-        const userId = props.initialPage.props.auth.user.id;
+        // const userId = ;
         // console.log('User ID:', userId);
 
-        // Cấu hình Pusher
-        const pusher = new Pusher('e09691a78203784895db', {
-            cluster: 'ap1', 
-        });
+        // // Cấu hình Pusher
+        // const pusher = new Pusher('e09691a78203784895db', {
+        //     cluster: 'ap1', 
+        // });
 
-        // Đăng ký kênh và lắng nghe sự kiện
-        const channel = pusher.subscribe('private-user.' + userId);
-        channel.bind('notification.created', (data) => {
-            console.log('New Notification:', data);
-        });
+        // // Đăng ký kênh và lắng nghe sự kiện
+        // const channel = pusher.subscribe('private-user.' + userId);
+        // channel.bind('notification.created', (data) => {
+        //     console.log('New Notification:', data);
+        // });
 
         app.use(plugin)
             .use(ZiggyVue)

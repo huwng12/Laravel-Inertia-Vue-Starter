@@ -19,4 +19,10 @@ class NotificationController extends Controller
         $notifications = $this->notificationRepository->getNotifications(5);
         return response()->json($notifications);
     }
+
+    public function updateNotificationIsRead(Request $request)
+    {
+        $this->notificationRepository->updateNotificationIsRead($request->id);
+        return back()->with('status', 'Notification updated successfully');
+    }
 }
