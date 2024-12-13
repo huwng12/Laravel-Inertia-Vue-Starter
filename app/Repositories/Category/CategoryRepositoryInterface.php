@@ -15,4 +15,6 @@ interface CategoryRepositoryInterface
     public function activeCategory(string $categoryId): void;
 
     public function deleteCategory(string $categoryId): void;
+
+    public function editCategory(array $fields, int $categoryId): void;
 }

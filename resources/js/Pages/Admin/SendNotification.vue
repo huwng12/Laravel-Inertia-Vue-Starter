@@ -18,7 +18,6 @@ const form = useForm({
     'user_id': '',
     'title': '',
     'message': '',
-    'all': false,
 });
 const sendNotification = () => {
     form.post(route('notification.store'), {
@@ -44,7 +43,7 @@ const sendNotification = () => {
                     <select id="user" v-model="form.user_id"
                         class="text-slate-800 bg-slate-200 border-0 outline-0 rounded-lg text-sm py-1 overflow-y-auto max-h-[50px] space-y-1">
                         <option disabled selected value="">Please select a user</option>
-                        <option :value="form.all == true">All</option>
+                        <option :value="0">All</option>
                         <option v-for="(user, index) in users.data" :key="index" :value="user.id">
                             {{
                                 user.name }}

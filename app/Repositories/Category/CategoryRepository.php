@@ -54,4 +54,10 @@ class CategoryRepository implements CategoryRepositoryInterface
         Cache::forget('categories'); //xóa cache để lấy dữ liệu mới cập nhật cho main layout
 
     }
+
+    public function editCategory(array $fields, int $categoryId): void
+    {
+        $category = Category::where('id', $categoryId)->first();
+        $category->update($fields);
+    }
 }

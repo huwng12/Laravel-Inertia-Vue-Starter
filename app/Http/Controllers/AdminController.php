@@ -69,7 +69,7 @@ class AdminController extends Controller
 
     public function storeNotification(NotificationRequest $request)
     {
-        $this->notificationRepository->createNotification(request(['user_id', 'title', 'message']));
+        $this->notificationRepository->createNotification(request(['user_id', 'title', 'message', 'all']));
         return redirect()->route('notification.index')->with('status', 'Notification sent successfully');
     }
 }

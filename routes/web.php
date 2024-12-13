@@ -32,13 +32,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/', [ListingController::class, 'index'])->name('home');
 Route::resource('listings', ListingController::class)->except('index');
 
-//Listing Category
-Route::get('/category', [CategoryController::class, 'list'])->name('category.list');
-Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
-Route::post('/category/create', [CategoryController::class, 'store'])->name('category.store');
-Route::put('/category/active/{categoryId}', [CategoryController::class, 'active'])->name('category.active');
-Route::delete('/category/delete/{categoryId}', [CategoryController::class, 'delete'])->name('category.delete');
-Route::get('/category/{categoryId}', [CategoryController::class, 'index'])->where('categoryId', '[0-9]+')->name('category.index');
+
 
 //Admin routes
 Route::middleware(['auth', 'verified', Admin::class])
@@ -53,7 +47,18 @@ Route::middleware(['auth', 'verified', Admin::class])
         Route::post('/notifications', 'storeNotification')->name('notification.store');
     });
 
-
+//Listing Category
+Route::middleware(['auth', 'verified', Admin::class])
+    ->controller(CategoryController::class)
+    ->group(function () {
+        Route::get('/category', 'list')->name('category.list');
+        Route::get('/category/create', 'create')->name('category.create');
+        Route::post('/category/create', 'store')->name('category.store');
+        Route::put('/category/active/{categoryId}', 'active')->name('category.active');
+        Route::delete('/category/delete/{categoryId}', 'delete')->name('category.delete');
+        Route::get('/category/{categoryId}', 'index')->where('categoryId', '[0-9]+')->name('category.index');
+        Route::put('/category/edit/{categoryId}', 'edit')->name('category.edit');
+    });
 
 //Auth routes
 require __DIR__ . '/auth.php';

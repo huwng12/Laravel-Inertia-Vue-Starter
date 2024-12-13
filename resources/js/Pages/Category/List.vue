@@ -1,13 +1,33 @@
 <script setup>
 import PaginationLinks from '../../Components/PaginationLinks.vue';
 import SessionMessages from '../../Components/SessionMessages.vue';
+import EditCategoryOverlay from '../../Components/EditCategoryOverlay.vue';
 import { router } from '@inertiajs/vue3';
+import { ref } from 'vue';
+
+const showEditOverlay = ref(false);
+const categoryEditData = ref(null);
+
+//Get Edit category data from a row
+const showEditCategoryData = (category) => {
+    showEditOverlay.value = true;
+    categoryEditData.value = category;
+}
+
+//Close Edit category overlay
+const closeEditOverlay = () => {
+    showEditOverlay.value = false;
+    categoryEditData.value = null;
+}
 
 const props = defineProps({
     categoryList: Object,
     status: String
 });
 
+const updateCategory = (updateCategory) => {
+    console.log('dawfaew', updateCategory);
+}
 const activeCategory = (category) => {
     router.put(route('category.active', category.id));
 }
@@ -36,7 +56,7 @@ const deleteCategory = (category) => {
             <tr>
                 <th class="w-2/4 px-3 py-2 text-left">Category Name</th>
                 <th class="w-1/4 px-3 py-2 text-center">Active</th>
-                <!-- <th class="w-1/8 px-3 py-2">Listings</th> -->
+                <th class="w-1/8 px-3 py-2">Edit</th>
                 <th class="w-1/8 px-3 py-2">Delete</th>
             </tr>
         </thead>
@@ -49,16 +69,22 @@ const deleteCategory = (category) => {
                             : 'circle-xmark text-red-500'}`"></i>
                     </button>
                 </td>
-                <!-- <td class="w-1/4 px-3 py-2 text-center text-indigo-500">
-                    <i class="fa-solid fa-up-right-from-square"></i>
-                </td> -->
+                <td class="w-1/4 px-3 py-2 text-center text-indigo-500">
+                    <i class="fa-solid fa-pen-to-square cursor-pointer" @click.prevent="showEditCategoryData(category)">
+                    </i>
+                </td>
                 <td class="w-1/4 px-3 py-4 text-2xl text-center">
                     <button @click.prevent="deleteCategory(category)">
                         <a class="text-link text-red-500 text-sm ">Delete</a>
                     </button>
                 </td>
+
+
             </tr>
         </tbody>
     </table>
     <PaginationLinks class="mt-6" :paginator="categoryList" />
+
+    <EditCategoryOverlay v-if="showEditOverlay" @closeEditOverlay="$event => showEditOverlay = false"
+        @updateCategory="updateCategory" :category="categoryEditData" />
 </template>

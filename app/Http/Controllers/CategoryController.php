@@ -59,4 +59,13 @@ class CategoryController extends Controller
         $this->categoryRepository->createCategory($fields);
         return redirect()->route('category.list')->with('status', 'Category created successfully');
     }
+
+    public function edit(StoreCategoryRequest $request)
+    {
+        $fields = $request->validated();
+        $this->categoryRepository->editCategory($fields, $request->categoryId);
+        return inertia('Category/List', [
+            'status' => 'Category updated successfully',
+        ]);
+    }
 }
