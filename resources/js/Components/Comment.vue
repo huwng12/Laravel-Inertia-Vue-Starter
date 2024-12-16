@@ -43,7 +43,7 @@ const submitComment = () => {
     <Container class="container mt-6">
         <p class="w-full text-gray-500 border-b pb-2 pointer-events-none">Comments</p>
         <form @submit.prevent="submitComment" class="items-center space-y-4 mb-8">
-            <TextArea class="mt-2" rows="2" placeholder="Add a comment" icon="comment" v-model="form.comment" />
+            <TextArea class="mt-2" :rows=2 placeholder="Add a comment" icon="comment" v-model="form.comment" />
             <div class="flex gap-6 items-center">
                 <button type="submit" :disabled="form.processing"
                     class="px-6 py-2 rounded-lg bg-slate-950 text-white disabled:bg-slate-300 disabled:cursor-wait">

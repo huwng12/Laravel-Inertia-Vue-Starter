@@ -19,6 +19,7 @@ const form = useForm({
     'title': '',
     'message': '',
 });
+
 const sendNotification = () => {
     form.post(route('notification.store'), {
         onFinish: () => {

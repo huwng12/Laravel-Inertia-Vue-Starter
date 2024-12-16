@@ -15,6 +15,7 @@ class NotificationRepository implements NotificationRepositoryInterface
     {
         $fields['from_user_id'] = Auth::id();
         $fields['type'] = 1;
+        $fields['is_read'] = 0;
         $userId = Auth::id();
 
         if ($fields['user_id'] == 0) {
@@ -25,7 +26,8 @@ class NotificationRepository implements NotificationRepositoryInterface
                 broadcast(new NotificationCreated($fields, $id));
             }
         } else {
-            Notification::create($fields);
+            $notification_id = Notification::create($fields);
+            $fields['notification_id'] = $notification_id->id;
             broadcast(new NotificationCreated($fields, $fields['user_id']));
         }
         // Notification::create($fields);

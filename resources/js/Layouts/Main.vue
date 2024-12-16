@@ -18,6 +18,8 @@ const fetchNotification = async () => {
     const data = await response.json();
     notification.value = data.data;
     const unread = data.data.filter(n => n.is_read == 0);
+    console.log('user: ', unread);
+
     notificationCount.value = unread.length;
 };
 
@@ -27,19 +29,11 @@ if (user.value && user.value.id) {
     window.Echo.private(notificationId).listen("NotificationCreated", (e) => {
         notificationCount.value++;
         newNotification.value = {
-            id: e.notification.id,
+            id: e.notification.notification_id,
             title: e.notification.title,
             message: e.notification.message,
-        };
-        notification.value.unshift(newNotification.value);
-    });
-
-    window.Echo.private('notification.all').listen("NotificationCreated", (e) => {
-        notificationCount.value++;
-        newNotification.value = {
-            id: e.notification.id,
-            title: e.notification.title,
-            message: e.notification.message,
+            type: e.notification.type,
+            is_read: e.notification.is_read,
         };
         notification.value.unshift(newNotification.value);
     });
@@ -76,7 +70,6 @@ onMounted(() => {
     if (sessionStorage.getItem('user_logged_in') || localStorage.getItem('user_logged_in')) {
         fetchNotification();
     }
-
     window.addEventListener('userLoggedIn', fetchNotification);
 });
 

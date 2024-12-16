@@ -9,15 +9,8 @@ const emit = defineEmits(['closeEditOverlay', 'updateCategory']);
 const updateCategoryName = ref(props.category.name);
 
 const updateCategory = () => {
-    router.put(route('category.edit', props.category.id), { name: updateCategoryName.value }, {
-        onSuccess: () => {
-            emit('updateCategory', { id: props.category.id, name: updateCategoryName.value });
-            emit('closeEditOverlay'); // Đóng overlay sau khi cập nhật thành công
-        },
-        onError: (errors) => {
-            console.error(errors); // In lỗi nếu có
-        }
-    });
+    emit('updatedCategory', { id: props.category.id, name: updateCategoryName.value });
+    emit('closeEditOverlay');
 }
 
 </script>

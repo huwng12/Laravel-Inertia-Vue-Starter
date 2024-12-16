@@ -64,8 +64,9 @@ class CategoryController extends Controller
     {
         $fields = $request->validated();
         $this->categoryRepository->editCategory($fields, $request->categoryId);
-        return inertia('Category/List', [
-            'status' => 'Category updated successfully',
-        ]);
+        // return inertia('Category/List', [
+        //     'status' => 'Category updated successfully',
+        // ]);
+        return redirect()->route('category.list')->with('status', 'Category updated successfully');
     }
 }

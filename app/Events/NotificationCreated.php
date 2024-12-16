@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
+// use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 // use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -33,15 +33,6 @@ class NotificationCreated implements ShouldBroadcastNow
     {
         return [
             new PrivateChannel('notifications.' . $this->notification['user_id']),
-            // new Channel('notifications.all'),
         ];
     }
-    // public function broadcastOn()
-    // {
-    //     return [
-    //         new Channel('my-channel'),
-    //     ];
-    // }
-
-
 }

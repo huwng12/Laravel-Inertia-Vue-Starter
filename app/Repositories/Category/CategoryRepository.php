@@ -59,5 +59,6 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         $category = Category::where('id', $categoryId)->first();
         $category->update($fields);
+        Cache::forget('categories');
     }
 }

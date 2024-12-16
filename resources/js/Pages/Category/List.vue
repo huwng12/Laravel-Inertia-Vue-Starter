@@ -25,8 +25,8 @@ const props = defineProps({
     status: String
 });
 
-const updateCategory = (updateCategory) => {
-    console.log('dawfaew', updateCategory);
+const updateCategory = (updatedCategory) => {
+    router.put(route('category.edit', updatedCategory.id), { name: updatedCategory.name })
 }
 const activeCategory = (category) => {
     router.put(route('category.active', category.id));
@@ -85,6 +85,6 @@ const deleteCategory = (category) => {
     </table>
     <PaginationLinks class="mt-6" :paginator="categoryList" />
 
-    <EditCategoryOverlay v-if="showEditOverlay" @closeEditOverlay="$event => showEditOverlay = false"
-        @updateCategory="updateCategory" :category="categoryEditData" />
+    <EditCategoryOverlay v-if="showEditOverlay" @closeEditOverlay="closeEditOverlay" @updatedCategory="updateCategory"
+        :category="categoryEditData" />
 </template>
